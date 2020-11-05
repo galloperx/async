@@ -1,4 +1,4 @@
-name: async
+name: async2
 version: 2.5.0-nullsafety.3
 
 description: Utility functions and classes related to the 'dart:async' library.
