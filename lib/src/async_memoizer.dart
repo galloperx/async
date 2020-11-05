@@ -35,12 +35,25 @@ class AsyncMemoizer<T> {
 
   /// Whether [runOnce] has been called yet.
   bool get hasRun => _completer.isCompleted;
+  bool resetFlag = false;
 
   /// Runs the function, [computation], if it hasn't been run before.
   ///
   /// If [runOnce] has already been called, this returns the original result.
   Future<T> runOnce(FutureOr<T> Function() computation) {
-    if (!hasRun) _completer.complete(Future.sync(computation));
-    return future;
+    if(!resetFlag) {
+      if (!hasRun) _completer.complete(Future.sync(computation));
+      return future;
+    } else {
+      resetFlag = false;
+      _completer.complete(Future.sync(computation));
+      return future;
+    }
+  }
+
+  /// In case a rerun is actually needed.
+  void reset() {
+    resetFlag = true;
   }
 }
+
